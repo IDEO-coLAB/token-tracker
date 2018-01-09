@@ -29,11 +29,6 @@
 // }
 
 
-const foo = utils.hexToNumberString('0x0000000000000000000000000000000000000000000000008c2a687ce7720000')
-console.log(Number(foo))
+// const foo = utils.hexToNumberString('0x0000000000000000000000000000000000000000000000008c2a687ce7720000')
+// console.log(Number(foo))
 
-const balances = {}
-
-(tx) => {
-
-}
