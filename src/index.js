@@ -4,18 +4,18 @@ const utils = require('web3-utils')
 const abi = require('ethereumjs-abi')
 
 const GET_LOGS_URL_BASE = `https://api.infura.io/v1/jsonrpc/mainnet/eth_getLogs?params=`
-
 const TX_TOPIC_HASH = `0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef`
 
+// Working examples
+// const CONTRACT = '0xB20BB2780A6Ae9e399e805CE4F60321245F7a0DB'
+// const DECIMALS = 0
+
+const CONTRACT = '0x6dC896e52DeF34fF23Ab0B07250e12B9Fd9fe9E7'
+const DECIMALS = 18
+const START_BLOCK = 2980650
 const BLOCK_STEP = 50000
 
-// const CONTRACT = '0xB20BB2780A6Ae9e399e805CE4F60321245F7a0DB' // worked!
-const CONTRACT = '0x6dC896e52DeF34fF23Ab0B07250e12B9Fd9fe9E7'
-
-// const DECIMALS = 0 // worked!
-const DECIMALS = 18
-
-let txLog = []
+// let txLog = []
 let balances = {}
 
 
@@ -114,4 +114,4 @@ const getTransactionsForContract = (contractAddress, fromBlock) => {
     })
 }
 
-getTransactionsForContract(CONTRACT, 2980650)
+getTransactionsForContract(CONTRACT, START_BLOCK)
