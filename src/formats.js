@@ -27,8 +27,3 @@
 //   "transactionHash":"0x08135795a5c917b6eff494f5778f6b33e810fe6ed3646799a36d835aa3f94c64",
 //   "transactionIndex":"0x1b"
 // }
-
-
-// const foo = utils.hexToNumberString('0x0000000000000000000000000000000000000000000000008c2a687ce7720000')
-// console.log(Number(foo))
-
