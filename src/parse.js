@@ -1,57 +1,46 @@
-const _ = require('lodash')
-const fs = require('fs-extra')
-const utils = require('web3-utils')
-const abi = require('ethereumjs-abi')
-
+const _     = require('lodash')
+const fs    = require('fs-extra')
+const Web3  = require('web3');
 const token = require('./token-inputs')
 
-const DATA_FILE_PATH = `./store/${token.name}-data.json`
 
+const web3 = new Web3();
+
+
+const DATA_FILE_PATH = `../store/${token.name}-data.json`
 const tokenData = fs.readJsonSync(DATA_FILE_PATH)
 
+
+// quick check --
 console.log(tokenData.transactions.length + " transactions\n\n--------")
-// console.log(tokenData.transactions[tokenData.transactions.length-1])
+
 
 
 let balances = {}
+const processTransactions = (transactions) => {
+  transactions.forEach((tx) => {
+    let data      = tx.data
+    let topics    = tx.topics;
+    let sender    = web3.eth.abi.decodeParameter('address', topics[1]);
+    let recipient = web3.eth.abi.decodeParameter('address', topics[2]);
+
+    const txAmountBase10 = parseInt(data, 16)
+    const txAmountByTokenDecimal = Number(txAmountBase10 / Math.pow(10, token.decimals))
+
+    if (_.has(balances, sender)) {
+      balances[sender] -= txAmountByTokenDecimal
+    } else {
+      // what to do here... seems to be origin point of tokens?
+      console.log(sender);
+    }
+    if (_.has(balances, recipient)) {
+      balances[recipient] += txAmountByTokenDecimal
+    } else {
+      balances[recipient] = txAmountByTokenDecimal
+    }
+  })
+}
 
 
-// // This code is gross---no time spent here yet, but you get the idea :)
-// const processTransactions = (transactions) => {
-//   transactions.forEach((tx) => {
-//     let topics = tx.topics
-//     let sender = topics[1]
-//     let recipient = topics[2]
-//     let data = tx.data
 
-//     const txAmountBase10 = parseInt(data, 16)
-//     const txAmountByTokenDecimal = Number(txAmountBase10 / Math.pow(10, token.decimals))
-
-//     // console.log(sender)
-//     // console.log(recipient)
-//     // console.log(data)
-//     console.log(txAmountByTokenDecimal)
-//     console.log(txAmountBase10)
-//     console.log('-----------')
-//     console.log(tx)
-//     console.log('\n-----------\n\n')
-
-//     if (_.has(balances, sender)) {
-//       balances[sender] -= txAmountByTokenDecimal
-//     } else {
-//       // what to do here
-//     }
-
-//     if (_.has(balances, recipient)) {
-//       balances[recipient] += txAmountByTokenDecimal
-//     } else {
-//       balances[recipient] = txAmountByTokenDecimal
-//     }
-
-//     // console.log('===============================\n\n')
-
-//   })
-// }
-
-
-// processTransactions(tokenData.transactions)
+processTransactions(tokenData.transactions)
